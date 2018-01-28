@@ -5,7 +5,7 @@
     <h1>Todo List:</h1>
     <table class="table table-striped">
         <th>#</th><th>User</th><th>Description</th><th></th>
-        {% for todo in todos %}
+        {% for todo in todos.items %}
             <tr>
                 <td>{{ todo.id }}</td>
                 <td>{{ todo.user_id }}</td>
@@ -21,6 +21,17 @@
                 </td>
             </tr>
         {% endfor %}
+
+	{% for page in todos.iter_pages() %}
+
+		{% if page %}
+		<a href=" {{ url_for('todos_paginate', p=page) }} "> {{ page }} </a> 
+		{% else %}
+			...
+		{% endif %}
+
+
+	{% endfor %}
         <tr>
             <form method="post" action="{{ url_for('todos_POST') }}">
                 <td colspan="3">
