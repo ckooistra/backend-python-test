@@ -91,6 +91,7 @@ def todos_POST():
     t = Todo(session['user']['id'],des, False)
     db_session.add(t)
     db_session.commit()
+    flash("Todo Added!")
 
     return redirect('/todos/1')
 @app.route('/complete/<id>', methods=['POST'])
@@ -117,6 +118,7 @@ def todo_delete(id):
     current_db_sessions = db_session.object_session(t)
     current_db_sessions.delete(t)
     current_db_sessions.commit()
+    flash("Todo Deleted!")
 
     return redirect('/todos/1')
 
