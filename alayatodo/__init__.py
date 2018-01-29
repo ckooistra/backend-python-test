@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask
 import sqlite3
 from alayatodo.database import db_session
 from flask_sqlalchemy import SQLAlchemy

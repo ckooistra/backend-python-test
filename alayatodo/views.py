@@ -101,7 +101,7 @@ def todos_POST():
         return redirect('/login')
     des = request.form.get('description', '')
     if des != "":
-        t = Todo(session['user']['id'],des)
+        t = Todo(session['user']['id'],des, False)
         db_session.add(t)
         db_session.commit()
         flash("Thing added!")
@@ -126,6 +126,22 @@ def todo_delete(id):
     #g.db.execute("DELETE FROM todos WHERE id ='%s'" % id)
     #g.db.caommit()
     flash("Todo Deleted!")
+    return redirect('/todo')
+
+@app.route('/complete/<id>', methods=['POST'])
+def complete(id):
+    t = Todo.query.get(id)
+    if t.complete == True:
+        t.complete = False
+    else:
+        t.complete = True
+    current_db_sessions = db_session.object_session(t)
+    current_db_sessions.merge(t)
+    current_db_sessions.commit()
+    tees = Todo.query.all()
+    for t in tees:
+        print(t.complete)
+
     return redirect('/todo')
 
 def getUserSessionInfo(user):
