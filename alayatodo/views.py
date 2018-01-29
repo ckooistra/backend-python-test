@@ -32,7 +32,7 @@ def login_POST():
     if user:
         session['user'] = getUserSessionInfo(user)
         session['logged_in'] = True
-        return redirect('/todo')
+        return redirect('/todos/1')
 
     return redirect('/login')
 
@@ -57,15 +57,15 @@ def todo(id):
         return todos()
 
 
-@app.route('/todo', methods=['GET'])
-@app.route('/todo/', methods=['GET'])
-def todos():
+#@app.route('/todos', methods=['GET'])
+@app.route('/todos/<int:p>', methods=['GET'])
+def todos(p):
     if not session.get('logged_in'):
         return redirect('/login')
 
     #Get list of todos owned by logged in user
     todos = Todo.query.filter(Todo.user_id ==
-                              session['user']['id']).all()
+                              session['user']['id']).paginate(per_page=5,page=p)
     return render_template('todos.html', todos=todos)
 
 
@@ -81,7 +81,7 @@ def todos_POST():
     db_session.add(t)
     db_session.commit()
 
-    return redirect('/todo')
+    return redirect('/todos/1')
 
 
 
@@ -96,7 +96,7 @@ def todo_delete(id):
     current_db_sessions.delete(t)
     current_db_sessions.commit()
 
-    return redirect('/todo')
+    return redirect('/todos/1')
 
 def getUserSessionInfo(user):
     return {'id':user.id, 'username': user.username, 'password': user.password}
