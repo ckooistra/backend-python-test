@@ -87,11 +87,14 @@ def todos_POST():
         return redirect('/login')
 
     des = request.form.get('description', '')
+    if des:
 
-    t = Todo(session['user']['id'],des, False)
-    db_session.add(t)
-    db_session.commit()
-    flash("Todo Added!")
+        t = Todo(session['user']['id'],des, False)
+        db_session.add(t)
+        db_session.commit()
+        flash("Todo Added!")
+    else:
+        flash("Must include description when adding Todo!", "errors")
 
     return redirect('/todos/1')
 @app.route('/complete/<id>', methods=['POST'])
