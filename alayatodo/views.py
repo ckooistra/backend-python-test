@@ -2,7 +2,6 @@ from alayatodo import app
 from alayatodo.database import db_session
 from alayatodo.models import Todo, User
 from flask import (
-    g,
     redirect,
     render_template,
     request,
@@ -47,6 +46,8 @@ def logout():
 
 @app.route('/todo/<id>', methods=['GET'])
 def todo(id):
+    if not session.get('logged_in'):
+        return redirect('/login')
     curr_uid = session['user']['id']
     todo = Todo.query.filter(Todo.user_id == curr_uid, Todo.id ==id).first()
     return render_template('todo.html', todo=todo)
