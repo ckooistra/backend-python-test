@@ -77,12 +77,23 @@ def todos_POST():
 
     des = request.form.get('description', '')
 
-    t = Todo(session['user']['id'],des)
+    t = Todo(session['user']['id'],des, False)
     db_session.add(t)
     db_session.commit()
 
     return redirect('/todos/1')
+@app.route('/complete/<id>', methods=['POST'])
+def complete(id):
+    t = Todo.query.get(id)
+    if t.complete == True:
+        t.complete = False
+    else:
+        t.complete = True
+    current_db_sessions = db_session.object_session(t)
+    current_db_sessions.merge(t)
+    current_db_sessions.commit()
 
+    return redirect('/todos/1')
 
 
 

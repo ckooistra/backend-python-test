@@ -19,12 +19,12 @@ class Todo(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(String(50), ForeignKey('users.id'))
     description = Column(String(120), unique=True)
-    #complete = Column(Boolean)
+    complete = Column(Boolean)
 
-    def __init__(self, user_id=None, description=None): #, complete=None
+    def __init__(self, user_id=None, description=None, complete=None):
         self.user_id = user_id
         self.description = description
-        #self.complete = complete
+        self.complete = complete
 
     @property
     def serialize(self):
