@@ -7,7 +7,8 @@ from flask import (
     render_template,
     request,
     session,
-    flash
+    flash,
+    jsonify
     )
 
 
@@ -53,6 +54,16 @@ def todo(id):
     #If the url leads to a do owned by the logged in user otherwise switch back
     if todo:
         return render_template('todo.html', todo=todo)
+    else:
+        return todos()
+
+@app.route('/todo/<id>/json', methods=['GET'])
+def todo_json(id):
+    curr_uid = session['user']['id']
+    todo = Todo.query.filter(Todo.user_id == curr_uid, Todo.id ==id).first()
+    if todo:
+        return jsonify(todo.serialize)
+
     else:
         return todos()
 

@@ -30,7 +30,8 @@ class Todo(db.Model):
     def serialize(self):
         return {'id' : self.id,
                 'user_id' : self.user_id,
-                'description' : self.description }
+                'description' : self.description,
+                'complete' : self.complete }
 
     def __repr__(self):
         return '<Todo %r>' % (self.user_id)
